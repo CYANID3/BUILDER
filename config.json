@@ -1,0 +1,10 @@
+{
+  "app": {
+    "name": "ping-o-check",
+    "icon": "ping.ico",
+    "version": "1.0.5",
+    "desc": "Проверка доступности кобусов по ICMP",
+    "license": "CYANIDE © 2025",
+    "company": "CYANIDE"
+  }
+}

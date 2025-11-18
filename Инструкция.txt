@@ -1,0 +1,1 @@
+Закинуть app.exe в папку dist, заполнить config.json и запустить app-builder.ps1
