@@ -1,0 +1,15 @@
+{
+  "app": {
+    "name": "Название приложения",
+    "icon": "icon.ico",
+    "desc": "Описание приложения",
+    "license": "Лицензия © 2026",
+    "company": "Компания",
+    "main": "Путь\\к\\файлу\\main.go",
+    "versionFile": "Путь\\к\\файлу\\version.go",
+    "distrDir": "Путь\\к\\папке\\APP_BUILDER\\dist",
+    "buildDir": "Путь\\к\\папке\\\\APP_BUILDER\\build",
+    "sevenZip": "Путь\\к\\7-Zip\\7z.exe",
+    "version": ""
+  }
+}
