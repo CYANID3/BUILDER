@@ -1,26 +1,35 @@
 param(
-    $json = ".\config.json"
+    $json = ".\config.json",
+    $ver = "",
+    [switch]$zip 
 )
 
 # ===== Читаем JSON =====
 $config = Get-Content $json | ConvertFrom-Json
 
 # ===== Читаем версию из version.go =====
-$versionPath = $config.app.versionFile
-$versionLines = Get-Content $versionPath
-$version = $null
+if ($ver -eq "") {
+    # читаем версию из version.go
+    $versionPath = $config.app.versionFile
+    $versionLines = Get-Content $versionPath
+    $version = $null
 
-foreach ($line in $versionLines) {
-    if ($line -match 'VersionText\s*=\s*color\.GreenString\("v?([^"]+)"\)') {
-        $version = $matches[1]
-        break
+    foreach ($line in $versionLines) {
+        if ($line -match 'VersionText\s*=\s*color\.GreenString\("v?([^"]+)"\)') {
+            $version = $matches[1]
+            break
+        }
+    }
+
+    if (-not $version) {
+        Write-Error "Не удалось найти версию в $versionPath"
+        exit 1
     }
 }
-
-if (-not $version) {
-    Write-Error "Не удалось найти версию в $versionPath"
-    exit 1
+else {
+    $version = $ver
 }
+
 
 # ===== Обновляем JSON =====
 $config.app.version = $version
@@ -97,23 +106,27 @@ if (Test-Path $finalPath) { Remove-Item $finalPath -Force }
 
 Move-Item $newExe $finalPath -Force
 
-# ===== Создание .7z архива прямо в buildDir без вывода =====
-$archivePath = Join-Path $buildDir "$($config.app.name).7z"
+if ($zip) {
+    # ===== Создание .7z архива прямо в buildDir без вывода =====
+    $archivePath = Join-Path $buildDir "$($config.app.name).7z"
+    
+    if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
+    
+    # Временные файлы для подавления вывода
+    $outFile = [System.IO.Path]::GetTempFileName()
+    $errFile = [System.IO.Path]::GetTempFileName()
+    
+    Start-Process -FilePath $sevenZip `
+        -ArgumentList "a `"$archivePath`" `"$finalPath`"" `
+        -Wait `
+        -WindowStyle Hidden `
+        -RedirectStandardOutput $outFile `
+        -RedirectStandardError $errFile
+    
+    # Удаляем временные файлы
+    Remove-Item $outFile, $errFile
+    Write-Host "Архив создан в build: $($config.app.name).7z" -ForegroundColor Cyan
+}
 
-if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
-
-# Временные файлы для подавления вывода
-$outFile = [System.IO.Path]::GetTempFileName()
-$errFile = [System.IO.Path]::GetTempFileName()
-
-Start-Process -FilePath $sevenZip `
-    -ArgumentList "a `"$archivePath`" `"$finalPath`"" `
-    -Wait `
-    -WindowStyle Hidden `
-    -RedirectStandardOutput $outFile `
-    -RedirectStandardError $errFile
-
-# Удаляем временные файлы
-Remove-Item $outFile, $errFile
-
-Write-Host "Готово 👍 Архив создан в buildDir: $archivePath" -ForegroundColor Cyan
+Write-Host "Файл создан в build: $($config.app.name).exe" -ForegroundColor Cyan
+Write-Host " Готово 👍 " -ForegroundColor Black -BackgroundColor Green
