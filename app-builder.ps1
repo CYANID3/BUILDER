@@ -13,4 +13,6 @@ $config = Get-Content $json | ConvertFrom-Json
 .\Tools\rcedit-x64.exe $source --set-icon ".\icons\$($config.app.icon)"
 
 Rename-Item $source ".\$($config.app.name).exe"
-Move-Item ".\dist\$($config.app.name).exe" ".\build\$($config.app.name).exe"
+Move-Item ".\dist\$($config.app.name).exe" ".\build\$($config.app.name).exe" -Force
+
+# BlastMaker.exe,0

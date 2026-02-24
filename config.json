@@ -1,10 +1,13 @@
 {
   "app": {
-    "name": "ping-o-check",
+    "name": "kobus-pulse",
     "icon": "ping.ico",
-    "version": "1.0.5",
     "desc": "Проверка доступности кобусов по ICMP",
     "license": "CYANIDE © 2025",
-    "company": "CYANIDE"
+    "company": "CYANIDE",
+    "main": "C:\\Users\\CYANIDE\\Desktop\\PROJECTS\\kobus-pulse-main\\main.go",
+    "versionFile": "C:\\Users\\CYANIDE\\Desktop\\PROJECTS\\kobus-pulse-main\\utils\\version.go",
+    "buildDir": "C:\\Users\\CYANIDE\\Desktop\\PROJECTS\\APP_BUILDER\\dist",
+    "version": "1.1.3"
   }
 }
