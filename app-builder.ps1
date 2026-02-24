@@ -14,5 +14,3 @@ $config = Get-Content $json | ConvertFrom-Json
 
 Rename-Item $source ".\$($config.app.name).exe"
 Move-Item ".\dist\$($config.app.name).exe" ".\build\$($config.app.name).exe" -Force
-
-# BlastMaker.exe,0

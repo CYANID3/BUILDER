@@ -1,0 +1,1 @@
+Заполнить config.json и запустить builder.ps1
